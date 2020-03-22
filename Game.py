@@ -5,6 +5,7 @@ class Game:
     def __init__(self):
         self.players = []
         self.planets = []
+        self.orders = []
         self.current_cycle = 0
         self.is_game_running = False
 
@@ -17,7 +18,6 @@ class Game:
         player_name = input("Define player name: ")
         self.players.append(Player(name=player_name))
         self.create_universe()
-
         self.is_game_running = True
         self.run()
 
@@ -61,6 +61,14 @@ def random_point():
 class Planet:
     def __init__(self, location: Point):
         self.location = location
+
+
+class Order:
+    def __init__(self, name, player, cycles_left, planet):
+        self.name = name
+        self.player = player
+        self.cycles_left = cycles_left
+        self.planet = planet
 
 
 if __name__ == "__main__":
