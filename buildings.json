@@ -1,0 +1,9 @@
+{
+  "power_plant": {
+    "name": "Power Plant",
+    "energy_prod": 10,
+    "energy_used": 0,
+    "pop_needed": 100,
+    "prod_time": 5
+  }
+}
