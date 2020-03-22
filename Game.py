@@ -52,13 +52,17 @@ class Player:
 
     def menu(self):
         menu = "[1] Build\n"
+        menu += "[2] List current orders\n"
         menu += "[0] Other Actions…"
         print(menu)
         choice = input("Enter choice: ")
 
-        if choice == 1:
+        choice = int(choice)
 
+        if choice == 1:
             self.build()
+        elif choice == 2:
+            [print(order.name) for order in self.game.orders if order.player == self]
 
     def build(self):
         self.game.orders.append(Order(player=self, name='Building', cycles_left=3))
