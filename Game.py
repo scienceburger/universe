@@ -42,6 +42,7 @@ class Player:
     def __init__(self, name: str, game: Game = None):
         self.name = name
         self.game = game
+        self.credits = 0
         print(f"New player created: {self.name}")
         pass
 
@@ -68,6 +69,7 @@ class Player:
         self.game.orders.append(Order(player=self, name='Building', cycles_left=3))
         return 0
 
+
 class Point:
     def __init__(self, x: int = 0, y: int = 0, z: int = 0):
         self.x = x
@@ -85,6 +87,11 @@ def random_point():
 
 class Planet:
     def __init__(self, location: Point):
+        self.minerals = 0
+        self.population = 0
+        self.energy_prod = 0
+        self.energy_storage = 0
+        self.energy_storage_max = 0
         self.location = location
 
 
