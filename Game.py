@@ -91,7 +91,7 @@ class Player:
         choices = list(self.game.building_list.keys())
         print('Which building do you want to build?')
         for i, c in enumerate(choices):
-            print(f"{i} - {self.game.building_list[c]['name']}")
+            print(f"[{i}] {self.game.building_list[c]['name']}")
 
         choice = int(input("Enter choice: "))
 
