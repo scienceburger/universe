@@ -1,4 +1,5 @@
 import random
+import json
 
 
 class Game:
@@ -8,6 +9,11 @@ class Game:
         self.orders = []
         self.current_cycle = 0
         self.is_game_running = False
+        self.building_list = None
+
+    def load_building_list(self):
+        with open('buildings.json', 'r') as data:
+            self.building_list = json.load(data)
 
     def create_universe(self):
         planet_count = 1000
@@ -18,6 +24,7 @@ class Game:
         player_name = input("Define player name: ")
         self.players.append(Player(name=player_name, game=self))
         self.create_universe()
+        self.load_building_list()
         self.is_game_running = True
         self.run()
 
@@ -66,7 +73,20 @@ class Player:
             [print(order.name) for order in self.game.orders if order.player == self]
 
     def build(self):
-        self.game.orders.append(Order(player=self, name='Building', cycles_left=3))
+        choices = list(self.game.building_list.keys())
+        print('Which building do you want to build?')
+        for i, c in enumerate(choices):
+            print(f"{i} - {self.game.building_list[c]['name']}")
+
+        choice = int(input("Enter choice: "))
+
+        c_name = self.game.building_list[choices[choice]]['name']
+        c_cycles = self.game.building_list[choices[choice]]['prod_time']
+
+        self.game.orders.append(Order(player=self,
+                                      order_type='building',
+                                      name=c_name,
+                                      cycles_left=c_cycles))
         return 0
 
 
@@ -92,21 +112,41 @@ class Planet:
         self.energy_prod = 0
         self.energy_storage = 0
         self.energy_storage_max = 0
+        self.buildings = []
         self.location = location
+        self.player = None
+
+    def update(self):
+        self.energy_storage += self.energy_prod
 
 
 class Order:
-    def __init__(self, name: str = None, player: Player = None, cycles_left: int = 0, planet: Planet = None):
+    def __init__(self, name: str = None,
+                 order_type: str = None,
+                 player: Player = None,
+                 cycles_left: int = 0,
+                 planet: Planet = None):
         self.name = name
         self.player = player
         self.cycles_left = cycles_left
         self.planet = planet
+        self.type = order_type
 
     def decrement_cycles(self):
         self.cycles_left -= 1
 
 
+class Building:
+    def __init__(self):
+        self.name = None
+        self.player = None
+        self.planet = None
+        self.energy_prod = 0
+        self.energy_consumption = 0
+        self.population_production = 0
+        self.population_requirements = 0
+
+
 if __name__ == "__main__":
     g = Game()
     g.start_game()
-
