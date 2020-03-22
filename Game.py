@@ -26,7 +26,10 @@ class Game:
 
     def update(self):
         self.current_cycle += 1
+        self.orders.append(Order(cycles_left=8))
         print(".", end='')
+
+        [order.decrement_cycles() for order in self.orders]
 
         if self.current_cycle >= 80:
             self.stop_game()
@@ -64,11 +67,14 @@ class Planet:
 
 
 class Order:
-    def __init__(self, name, player, cycles_left, planet):
+    def __init__(self, name: str = None, player: Player = None, cycles_left: int = 0, planet: Planet = None):
         self.name = name
         self.player = player
         self.cycles_left = cycles_left
         self.planet = planet
+
+    def decrement_cycles(self):
+        self.cycles_left -= 1
 
 
 if __name__ == "__main__":
