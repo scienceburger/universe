@@ -30,7 +30,7 @@ class Game:
         [player.update() for player in self.players]
         [order.decrement_cycles() for order in self.orders]
 
-        if self.current_cycle >= 80:
+        if self.current_cycle >= 5:
             self.stop_game()
 
     def run(self):
@@ -54,8 +54,11 @@ class Player:
         print(menu)
         choice = input("Enter choice: ")
 
-    def build(self):
+        if choice == 1:
+            self.build()
 
+    def build(self):
+        print('building something')
         return 0
 
 class Point:
