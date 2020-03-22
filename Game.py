@@ -26,9 +26,8 @@ class Game:
 
     def update(self):
         self.current_cycle += 1
-        self.orders.append(Order(cycles_left=8))
-        print(".", end='')
 
+        [player.update() for player in self.players]
         [order.decrement_cycles() for order in self.orders]
 
         if self.current_cycle >= 80:
@@ -45,6 +44,19 @@ class Player:
         print(f"New player created: {self.name}")
         pass
 
+    def update(self):
+        print('Updating player')
+        self.menu()
+
+    def menu(self):
+        menu = "[1] Build\n"
+        menu += "[0] Other Actions…"
+        print(menu)
+        choice = input("Enter choice: ")
+
+    def build(self):
+
+        return 0
 
 class Point:
     def __init__(self, x: int = 0, y: int = 0, z: int = 0):
@@ -80,5 +92,4 @@ class Order:
 if __name__ == "__main__":
     g = Game()
     g.start_game()
-
 
