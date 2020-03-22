@@ -5,5 +5,12 @@
     "energy_used": 0,
     "pop_needed": 100,
     "prod_time": 5
+  },
+  "mine": {
+    "name": "Mine",
+    "energy_prod": 0,
+    "energy_used": 1,
+    "pop_needed": 0,
+    "prod_time": 2
   }
 }
