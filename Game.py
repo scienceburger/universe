@@ -2,6 +2,21 @@ import random
 import json
 
 
+def random_point():
+    random.seed('hello world')
+    r_x = random.randint(-10000, 10000)
+    r_y = random.randint(-10000, 10000)
+    r_z = random.randint(-10000, 10000)
+    return Point(r_x, r_y, r_z)
+
+
+class Point:
+    def __init__(self, x: int = 0, y: int = 0, z: int = 0):
+        self.x = x
+        self.y = y
+        self.z = z
+
+
 class Game:
     def __init__(self):
         self.players = []
@@ -88,21 +103,6 @@ class Player:
                                       name=c_name,
                                       cycles_left=c_cycles))
         return 0
-
-
-class Point:
-    def __init__(self, x: int = 0, y: int = 0, z: int = 0):
-        self.x = x
-        self.y = y
-        self.z = z
-
-
-def random_point():
-    random.seed('hello world')
-    r_x = random.randint(-10000, 10000)
-    r_y = random.randint(-10000, 10000)
-    r_z = random.randint(-10000, 10000)
-    return Point(r_x, r_y, r_z)
 
 
 class Planet:
