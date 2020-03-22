@@ -16,7 +16,7 @@ class Game:
 
     def start_game(self):
         player_name = input("Define player name: ")
-        self.players.append(Player(name=player_name))
+        self.players.append(Player(name=player_name, game=self))
         self.create_universe()
         self.is_game_running = True
         self.run()
@@ -39,12 +39,14 @@ class Game:
 
 
 class Player:
-    def __init__(self, name: str):
+    def __init__(self, name: str, game: Game = None):
         self.name = name
+        self.game = game
         print(f"New player created: {self.name}")
         pass
 
     def update(self):
+        print('---------------')
         print('Updating player')
         self.menu()
 
@@ -55,10 +57,11 @@ class Player:
         choice = input("Enter choice: ")
 
         if choice == 1:
+
             self.build()
 
     def build(self):
-        print('building something')
+        self.game.orders.append(Order(player=self, name='Building', cycles_left=3))
         return 0
 
 class Point:
