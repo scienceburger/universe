@@ -34,6 +34,7 @@ class Game:
         planet_count = 1000
         for i in range(0, planet_count):
             self.planets.append(Planet(location=random_point()))
+        self.planets[0].player = self.players[0]
 
     def start_game(self):
         player_name = input("Define player name: ")
@@ -73,9 +74,16 @@ class Player:
         print('Updating player')
         self.menu()
 
+    def player_planets(self):
+        player_planets = [planet for planet in self.game.planets if planet.player == self]
+        for p in player_planets:
+            print(p.location.x)
+        return player_planets
+
     def menu(self):
         menu = "[1] Build\n"
         menu += "[2] List current orders\n"
+        menu += "[3  Planets list"
         menu += "[0] Other Actions…"
         print(menu)
         choice = input("Enter choice: ")
@@ -86,6 +94,8 @@ class Player:
             self.build()
         elif choice == 2:
             [print(order.name) for order in self.game.orders if order.player == self]
+        elif choice == 3:
+            self.player_planets()
 
     def build(self):
         choices = list(self.game.building_list.keys())
