@@ -1,5 +1,6 @@
 from flask import Flask, session, redirect, url_for, request
 from markupsafe import escape
+from game import Game
 
 app = Flask(__name__)
 
@@ -7,7 +8,7 @@ app = Flask(__name__)
 sec_key = open('secrets', 'rb').read()
 app.secret_key = sec_key
 
-order_queue = []
+game = Game()
 
 
 @app.route('/')
@@ -17,19 +18,9 @@ def index():
     return 'You are not logged in'
 
 
-@app.route('/add_to_orders')
-def add_to_order_queue():
-    order_queue.append('something')
-    return 'thing done'
-
-
-@app.route('/list_orders')
-def list_orders():
-    return "\n".join(order_queue)
-
-
 @app.route('/update')
 def update():
+    game.update()
     return 'Done!'
 
 
