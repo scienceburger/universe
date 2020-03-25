@@ -1,21 +1,34 @@
 from flask import Flask, session, redirect, url_for, request
-from markupsafe import escape
 from game import Game
+# from markupsafe import escape
 
 app = Flask(__name__)
 
-# secret key is required to handle session. Create your own 'secrets' file at root of project and read from it.
+# secret key is required to handle sessions.
+# Create your own 'secrets' file at root of project and read from it.
 sec_key = open('secrets', 'rb').read()
 app.secret_key = sec_key
 
 game = Game()
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
+
+    if request.method == 'POST':
+        if 'signup' in request.form:
+            return redirect(url_for('signup'))
+        elif 'login' in request.form:
+            return redirect(url_for('login'))
+    else:
+        return '''
+        <div>
+            <form method='post'>
+                <input type='submit' name='signup' value='Sign me up! '>
+                <input type='submit' name='login' value='Log me in! '>
+            </form>
+        </div>
+        '''
 
 
 @app.route('/update')
@@ -35,6 +48,16 @@ def login():
             <p><input type=submit value=Login>
         </form>
     '''
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        return '''
+        <form method="post">
+            <p><input type=text name=username></p>
+            <p><input type=submit value="Submit"></p>
+        '''
 
 @app.route('/logout')
 def logout():
