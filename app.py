@@ -1,6 +1,5 @@
 from flask import Flask, session, redirect, url_for, request
-from game import Game
-from player import Player
+from game import Game, Player
 import hashlib
 import templates as t
 # from markupsafe import escape
@@ -29,8 +28,8 @@ def index():
 
     else:
         if session.get('username'):
-            r_string = t.UNIVERSE_TITLE
-            r_string += f"{session['username']} logged in."
+            r_string = t.UNIVERSE_TITLE + t.EOL
+            r_string += f"{session['username']} logged in." + t.EOL
             r_string += t.LOGOUT_LINK
 
             return r_string
@@ -109,6 +108,11 @@ def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
     return redirect(url_for('index'))
+
+
+@app.route('/list_users')
+def list_users():
+    return f"{t.EOL.join(user_table.keys())}"
 
 
 if __name__ == '__main__':
