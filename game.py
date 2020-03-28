@@ -1,3 +1,5 @@
+from player import Player
+
 class Game:
 
     def __init__(self):
@@ -11,3 +13,6 @@ class Game:
 
         for p in self.planets:
             p.update()
+
+    def add_player(self, player: Player):
+        self.players.append(player)

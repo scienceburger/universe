@@ -1,6 +1,8 @@
 from flask import Flask, session, redirect, url_for, request
 from game import Game
+from player import Player
 import hashlib
+import templates as t
 # from markupsafe import escape
 
 app = Flask(__name__)
@@ -9,6 +11,8 @@ app = Flask(__name__)
 # Create your own 'secrets' file at root of project and read from it.
 sec_key = open('secrets', 'rb').read()
 app.secret_key = sec_key
+
+print(t.UNIVERSE_TITLE)
 
 game = Game()
 user_table = {}
@@ -22,15 +26,20 @@ def index():
             return redirect(url_for('signup'))
         elif 'login' in request.form:
             return redirect(url_for('login'))
+
     else:
-        return '''
-        <div>
-            <form method='post'>
-                <input type='submit' name='signup' value='Sign me up! '>
-                <input type='submit' name='login' value='Log me in! '>
-            </form>
-        </div>
-        '''
+        if session.get('username'):
+            return f"{session['username']} logged in."
+        else:
+            return f'''
+            <h1>{t.UNIVERSE_TITLE}</h1>
+            <div>
+                <form method='post'>
+                    {t.LOGIN_BUTTON}
+                    {t.SIGNUP_BUTTON}
+                </form>
+            </div>
+            '''
 
 
 @app.route('/update')
@@ -42,15 +51,26 @@ def update():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return '''
-        <form method="post">
-            <p><input type=text name=username>
-            <p><input type="password" name="password"</p>
-            <p><input type=submit value=Login>
-        </form>
-    '''
+        username = request.form['username']
+        password = request.form['password']
+
+        m = hashlib.sha3_256()
+        m.update(username.encode('utf-8'))
+        m.update(password.encode('utf-8'))
+
+        if user_table[username] == m.hexdigest():
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+        else:
+            return 'FAILED LOGGING IN!'
+    else:
+        return '''
+            <form method="post">
+                <p><input type=text name=username>
+                <p><input type="password" name="password"</p>
+                <p><input type=submit value=Login>
+            </form>
+        '''
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -72,7 +92,11 @@ def signup():
         m.update(password.encode('utf-8'))
         user_table[username] = m.hexdigest()
 
-        return f'''{request.form['username']}Done!'''
+        session["username"] = username
+        p = Player(username=username)
+        game.add_player(p)
+
+        return f'''{request.form['username']}Done! <a href='/'>home!</a>'''
 
 
 @app.route('/logout')
