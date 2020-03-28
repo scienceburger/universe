@@ -29,7 +29,11 @@ def index():
 
     else:
         if session.get('username'):
-            return f"{session['username']} logged in."
+            r_string = t.UNIVERSE_TITLE
+            r_string += f"{session['username']} logged in."
+            r_string += t.LOGOUT_LINK
+
+            return r_string
         else:
             return f'''
             <h1>{t.UNIVERSE_TITLE}</h1>
@@ -58,9 +62,10 @@ def login():
         m.update(username.encode('utf-8'))
         m.update(password.encode('utf-8'))
 
-        if user_table[username] == m.hexdigest():
-            session['username'] = request.form['username']
-            return redirect(url_for('index'))
+        if username in user_table:
+            if user_table[username] == m.hexdigest():
+                session['username'] = request.form['username']
+                return redirect(url_for('index'))
         else:
             return 'FAILED LOGGING IN!'
     else:
