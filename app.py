@@ -1,5 +1,6 @@
 from flask import Flask, session, redirect, url_for, request
 from game import Game
+import hashlib
 # from markupsafe import escape
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ sec_key = open('secrets', 'rb').read()
 app.secret_key = sec_key
 
 game = Game()
+user_table = {}
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -45,6 +47,7 @@ def login():
     return '''
         <form method="post">
             <p><input type=text name=username>
+            <p><input type="password" name="password"</p>
             <p><input type=submit value=Login>
         </form>
     '''
@@ -55,9 +58,22 @@ def signup():
     if request.method == 'GET':
         return '''
         <form method="post">
-            <p><input type=text name=username></p>
-            <p><input type=submit value="Submit"></p>
+            <p><input type="text" name="username"></p>
+            <p><input type="password" name="password"</p>
+            <p><input type="submit" value="Submit"></p>
+        </form>
         '''
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        m = hashlib.sha3_256()
+        m.update(username.encode('utf-8'))
+        m.update(password.encode('utf-8'))
+        user_table[username] = m.hexdigest()
+
+        return f'''{request.form['username']}Done!'''
+
 
 @app.route('/logout')
 def logout():
