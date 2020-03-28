@@ -9,10 +9,20 @@ def random_point():
     return Point(x, y, z)
 
 
+def generate_random_planet():
+    return Planet(random_point())
+
+
 class Game:
     def __init__(self):
         self.players = []
         self.planets = []
+        self.generate_galaxy(10000)
+
+    def generate_galaxy(self, planet_count):
+        print('Generating galaxy…')
+        for i in range(0, planet_count):
+            self.planets.append(generate_random_planet())
 
     def update(self):
         for p in self.planets:
@@ -39,13 +49,12 @@ class Player:
 
 
 class Planet:
-
-    def __init__(self):
-        pass
+    def __init__(self, coord):
+        self.player = None
+        self.coord = coord
 
 
 class Point:
-
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
